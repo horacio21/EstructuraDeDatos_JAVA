@@ -1,0 +1,10 @@
+1,jean,vasquez,embrujo,inf
+8,marcela,vecerra,angeles,inf 
+9,eustaquia,martines,vega,inf
+10,cleonidia,hernandes,sabaneta,inf
+5,juanita,melendes,llaguta,inf
+6,josefa,perez,cecara,inf
+7,federica,moronto,villa,inf
+2,pedrita,gonzales,guandules,med
+3,petunia,moreta,herradura,merc 
+4,morena,suares,pepino,veterinaria 
