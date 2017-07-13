@@ -1,0 +1,230 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package so_proyecto1;
+
+/**
+ *
+ * @author Arrow
+ */
+public class BinarioTree {
+
+    Nodo raiz;
+    private static  boolean impresion;
+//Inicializar el constructor
+
+   public void Impresionoff(){impresion=false;}
+
+    public BinarioTree() {
+        raiz = null;
+        this.impresion=true;
+    }
+    //Metodo para insertar un nodo en el arbol
+
+    public void Agregarnodo(int d) {
+        Nodo nuevo = new Nodo(d);
+        if (raiz == null) {
+            raiz = nuevo;
+        } else {
+            Nodo auxiliar = raiz;
+            Nodo padre;
+            while (true) {
+                padre = auxiliar;
+                if (d < auxiliar.getDato()) {
+                    //los datos menores van a la izquierda
+                    auxiliar = auxiliar.getIzq();
+                    if (auxiliar == null) {
+                        padre.setIzq(nuevo);
+                        return;
+                    }
+                } else {
+                    //los datos mayores van a la derecha
+                    auxiliar = auxiliar.getDer();
+                    //----------------------------------------
+                    if (auxiliar == null) {
+                        padre.setDer(nuevo);
+                        return;
+                    }
+                    //----------------------------------------
+                }
+
+            }
+        }
+
+    }
+//Sumar arboles
+
+    public void Agregarnodo(Nodo d) {
+
+        if (raiz == null) {
+            raiz = d;
+        } else {
+            Nodo auxiliar = raiz;
+            Nodo padre;
+            while (true) {
+                padre = auxiliar;
+                if (d.getDato() < auxiliar.getDato()) {
+                    //los datos menores van a la izquierda
+                    auxiliar = auxiliar.getIzq();
+                    if (auxiliar == null) {
+                        padre.setIzq(d);
+                        return;
+                    }
+                } else {
+                    //los datos mayores van a la derecha
+                    auxiliar = auxiliar.getDer();
+                    //----------------------------------------
+                    if (auxiliar == null) {
+                        padre.setDer(d);
+                        return;
+                    }
+                    //----------------------------------------
+                }
+
+            }
+        }
+
+    }
+
+    //metodo para saber cuando el arbol esta vacio.
+    public boolean estaVacio() {
+        return raiz == null;
+    }
+
+    //Inorden Izquierda,raiz y derecha
+    public static void Inorden(Nodo root) {
+      
+        if (root != null) {
+            Inorden(root.getIzq());
+           if(impresion==true) System.out.print("\033[31m " + root.getDato() + "\n ");
+            Inorden(root.getDer());
+        }
+      
+    }
+
+    // Preorden raiz, izquierda y derecha
+    public static void Preorden(Nodo root) {
+        if (root != null) {
+            System.out.print("\033[34m " + root.getDato() + " \n");
+            //Usando recursividad
+            Preorden(root.getIzq());
+            Preorden(root.getDer());
+        }
+    }
+
+    //Izquierda, derecha y raiz
+    public static void Postorden(Nodo root) {
+        if (root != null) {
+            Postorden(root.getIzq());
+            Postorden(root.getDer());
+            System.out.print(" " + root.getDato() + " \n");
+
+        }
+    }
+
+    //Metodo de busqueda de un nodo
+    public Nodo BuscarNodo(int d) {
+        Nodo aux = raiz;
+//----------------------------------------
+        while (aux.getDato() != d) {
+            if (d < aux.getDato()) {
+                aux = aux.getIzq();
+            } else {
+                aux = aux.getDer();
+            }
+            if (aux == null) {
+                return null;
+            }
+        }
+//----------------------------------------        
+        return aux;
+    }
+
+//Eliminar del nodo
+    public boolean Eliminar(int d) {
+
+        Nodo aux = raiz;
+        Nodo padre = raiz;
+        boolean Son = true;
+        while (aux.getDato() != d) {
+            padre = aux;
+
+//----------------------------------------
+            if (d < aux.getDato()) {
+                Son = true;
+                aux = aux.getIzq();
+            } else {
+                Son = false;
+                aux = aux.getDer();
+            }
+            if (aux == null) {
+                return false;
+            }
+        }
+//----------------------------------------
+        if (aux.getDer() == null && aux.getIzq() == null) {
+            if (aux == raiz) {
+                aux = null;
+            } else if (Son) {
+                padre.nullDer(padre);
+            } else {
+                padre.nullDer(padre);
+            }
+        } //----------------------------------------
+        else if (aux.getDer() == null) {
+            if (aux == raiz) {
+                aux = aux.getIzq();
+            } else if (Son) {
+                padre.setIzq(aux.getIzq());
+            } else {
+                padre.setDer(aux.getIzq());
+            }
+        } //----------------------------------------
+        else if (aux.getDer() == null) {
+            if (aux == raiz) {
+                aux = aux.getDer();
+            } else if (Son) {
+                padre.setIzq(aux.getDer());
+            } else {
+                padre.setDer(aux.getDer());
+            }
+        } //----------------------------------------
+        else {
+            Nodo reemplazo = ObtenerNodoReemplazo(aux);
+            if (aux == raiz) {
+                raiz = reemplazo;
+            } else if (Son) {
+                padre.setIzq(reemplazo);
+            } else {
+                padre.setDer(reemplazo);
+            }
+            reemplazo.setIzq(aux.getIzq());
+        }
+        //----------------------------------------
+
+        return true;
+    }
+
+//Metodo devuelve el nodo Reemplazado
+    public Nodo ObtenerNodoReemplazo(Nodo nodoR) {
+        Nodo ReemplazoPadre, reemplazo, aux;
+        ReemplazoPadre = reemplazo = nodoR;
+        aux = nodoR.getDer();
+        //----------------------------------------
+        while (aux != null) {
+            ReemplazoPadre = reemplazo;
+            reemplazo = aux;
+            aux = aux.getIzq();
+        }
+        //----------------------------------------
+
+        if (reemplazo != nodoR.getDer()) {
+            ReemplazoPadre.setIzq(reemplazo.getDer());
+        }
+        System.out.println("\nEl Nodo eliminado y Sustituido por : " + reemplazo);
+        return reemplazo;
+    }
+
+}
